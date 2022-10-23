@@ -16,13 +16,15 @@ use App\Http\Controllers\FilesController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-function resource($uri, $controller_class) {
-    Route::get($uri, [$controller_class , 'index']);
-    Route::get($uri . '/{id}', [$controller_class , 'show']);
-    Route::post($uri, [$controller_class , 'create']);
-    Route::put($uri . '/{id}', [$controller_class , 'update']);
-    Route::patch($uri . '/{id}', [$controller_class , 'update']);
-    Route::delete($uri . '/{id}', [$controller_class , 'destroy']);
+if (!function_exists('resource')) {
+    function resource($uri, $controller_class) {
+        Route::get($uri, [$controller_class, 'index']);
+        Route::get($uri . '/{id}', [$controller_class, 'show']);
+        Route::post($uri, [$controller_class, 'create']);
+        Route::put($uri . '/{id}', [$controller_class, 'update']);
+        Route::patch($uri . '/{id}', [$controller_class, 'update']);
+        Route::delete($uri . '/{id}', [$controller_class, 'destroy']);
+    }
 }
 
 Route::middleware(['auth:sanctum', 'api.request.validate'])->group(function () {
