@@ -25,7 +25,7 @@ function resource($uri, $controller_class) {
     Route::delete($uri . '/{id}', [$controller_class , 'destroy']);
 }
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'api.request.validate'])->group(function () {
     Route::get('/me', function (Request $request) {
         return $request->user();
     });
