@@ -17,12 +17,14 @@ class ApiRequestValidate {
      */
     public function handle(Request $request, Closure $next) {
         $lastMinute = Carbon::now()->subMinutes()->toDateTimeString();
-        $countQueriesLastMinute = ApiRequest::where('created_at', '>=', $lastMinute)->count();
+        $token = $request->user()->currentAccessToken()->token;
+        $countQueriesLastMinute = ApiRequest::where('created_at', '>=', $lastMinute)
+            ->where('token', $token)->count();
         if ($countQueriesLastMinute >= 3) {
             return response()->json('No puedes realizar más consultas', 401);
         }
         ApiRequest::create([
-            'token' => $request->user()->currentAccessToken()->token,
+            'token' => $token,
             'path' => $request->fullUrl(),
             'method' => $request->method()
         ]);
