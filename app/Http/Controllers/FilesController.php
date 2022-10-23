@@ -24,15 +24,31 @@ class FilesController extends Controller {
         $request->validate([
             'file' => 'required|max:500',
         ]);
-        $fileName = Str::uuid()->toString() . '.' . $request->file->getClientOriginalExtension();
-        $request->file->storeAs('uploads', $fileName, 'public');;
+        $file = $this->createFile($request->file, $request->user()->id);
+        return response()->json($file, 201);
+    }
+
+    public function group(Request $request) {
+        $request->validate([
+            'files.*' => 'required|max:500'
+        ]);
+        $files = [];
+        foreach($request->file('files') as $uploadedFile){
+            $files[] = $this->createFile($uploadedFile, $request->user()->id);
+        }
+        return response()->json($files, 201);
+    }
+
+    private function createFile($requestFile, $userId) {
+        $fileName = Str::uuid()->toString() . '.' . $requestFile->getClientOriginalExtension();
+        $requestFile->storeAs('uploads', $fileName, 'public');;
         $file = new File();
         $file->filename = $fileName;
-        $file->user_id = $request->user()->id;
-        $file->type = $request->file->getClientMimeType();
-        $file->size = $request->file->getSize();
+        $file->user_id = $userId;
+        $file->type = $requestFile->getClientMimeType();
+        $file->size = $requestFile->getSize();
         $file->save();
-        return response()->json($file, 201);
+        return $file;
     }
 
     public function destroy(Request $request, $id) {

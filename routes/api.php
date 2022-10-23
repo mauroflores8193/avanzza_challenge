@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
     resource("/files", FilesController::class);
+    Route::post('/files/group', [FilesController::class, 'group']);
 });
 
 Route::post('/login', [AuthController::class, 'login']);
