@@ -12,9 +12,13 @@ class ApiRequestValidateTest extends TestCase {
         $maxQueries = 3;
         for($i = 0; $i < $maxQueries; $i++) {
             $validQueryResponse = $this->withHeaders(['Authorization' => "Bearer $token"])->get('/api/me');
+            $validQueryResponse->assertStatus(200);
         }
-        $validQueryResponse->assertStatus(200);
         $response = $this->withHeaders(['Authorization' => "Bearer $token"])->get('/api/me');
         $response->assertUnauthorized();
+        $this->travel(1)->minutes();
+        $this->travel(1)->seconds();
+        $validQueryResponse = $this->withHeaders(['Authorization' => "Bearer $token"])->get('/api/me');
+        $validQueryResponse->assertStatus(200);
     }
 }

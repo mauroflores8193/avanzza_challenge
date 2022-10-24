@@ -10,6 +10,11 @@ use Tests\TestCase;
 
 class FileTest extends TestCase {
 
+    public function setUp(): void {
+        parent::setUp();
+        Storage::fake('public');
+    }
+
     public function test_create() {
         $response = $this->requestCreateFakeFile();
         $lastFile = File::all()->last();
@@ -27,7 +32,6 @@ class FileTest extends TestCase {
     }
 
     public function test_group() {
-        Storage::fake('public');
         $fakeFile = UploadedFile::fake()->create('document.pdf', 200, 'application/pdf');
         $response = $this
             ->withHeaders([
@@ -79,7 +83,6 @@ class FileTest extends TestCase {
     }
 
     private function requestCreateFakeFile() {
-        Storage::fake('public');
         $fakeFile = UploadedFile::fake()->create('document.pdf', 200, 'application/pdf');
         return $this
             ->withHeaders([
