@@ -6,7 +6,7 @@ use App\Models\User;
 use Tests\TestCase;
 
 class ApiRequestValidateTest extends TestCase {
-    public function test_no_more_queries() {
+    public function test_limit_queries() {
         $user = User::all()->first();
         $token = $this->getToken($user);
         $maxQueries = 3;
