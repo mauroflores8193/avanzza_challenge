@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         $user = new \App\Models\User();
         $user->email = 'mflores@gmail.com';
         $user->name = 'Mauro Flores';
-        $user->password = Hash::make('1');
+        $user->password = Hash::make('paswword');
         $user->save();
     }
 }
